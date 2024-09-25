@@ -1,0 +1,42 @@
+#! /opt/homebrew/Cellar/icarus-verilog/12.0/bin/vvp
+:ivl_version "12.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision - 12;
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/system.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/vhdl_sys.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/vhdl_textio.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/v2005_math.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/va_math.vpi";
+S_0x13bf06260 .scope module, "not_gate_tb" "not_gate_tb" 2 4;
+ .timescale -9 -12;
+v0x13bf195f0_0 .var "a", 0 0;
+v0x13bf196a0_0 .net "y", 0 0, L_0x13bf19750;  1 drivers
+S_0x13bf05830 .scope module, "uut" "not_gate" 2 9, 3 3 0, S_0x13bf06260;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "a";
+    .port_info 1 /OUTPUT 1 "y";
+L_0x13bf19750 .functor NOT 1, v0x13bf195f0_0, C4<0>, C4<0>, C4<0>;
+v0x13bf063d0_0 .net "a", 0 0, v0x13bf195f0_0;  1 drivers
+v0x13bf19540_0 .net "y", 0 0, L_0x13bf19750;  alias, 1 drivers
+    .scope S_0x13bf06260;
+T_0 ;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x13bf195f0_0, 0, 1;
+    %delay 10000, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x13bf195f0_0, 0, 1;
+    %delay 10000, 0;
+    %vpi_call 2 18 "$finish" {0 0 0};
+    %end;
+    .thread T_0;
+    .scope S_0x13bf06260;
+T_1 ;
+    %vpi_call 2 22 "$monitor", "At time %t: a = %b, y = %b", $time, v0x13bf195f0_0, v0x13bf196a0_0 {0 0 0};
+    %end;
+    .thread T_1;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "testbenches/not_gate_tb.v";
+    "circuits/not_gate.v";
