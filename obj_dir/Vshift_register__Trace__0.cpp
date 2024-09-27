@@ -24,10 +24,8 @@ void Vshift_register___024root__trace_chg_0_sub_0(Vshift_register___024root* vlS
     // Init
     uint32_t* const oldp VL_ATTR_UNUSED = bufp->oldp(vlSymsp->__Vm_baseCode + 1);
     // Body
-    bufp->chgBit(oldp+0,(vlSelfRef.clk));
-    bufp->chgBit(oldp+1,(vlSelfRef.rst));
-    bufp->chgCData(oldp+2,(vlSelfRef.data_in),4);
-    bufp->chgCData(oldp+3,(vlSelfRef.data_out),4);
+    bufp->chgCData(oldp+0,(vlSelfRef.data_in),4);
+    bufp->chgCData(oldp+1,(vlSelfRef.data_out),4);
 }
 
 void Vshift_register___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {

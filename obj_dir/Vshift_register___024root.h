@@ -14,16 +14,16 @@ class alignas(VL_CACHE_LINE_BYTES) Vshift_register___024root final : public Veri
   public:
 
     // DESIGN SPECIFIC STATE
-    VL_IN8(clk,0,0);
-    VL_IN8(rst,0,0);
     VL_IN8(data_in,3,0);
     VL_OUT8(data_out,3,0);
-    CData/*0:0*/ __Vtrigprevexpr___TOP__clk__0;
-    CData/*0:0*/ __Vtrigprevexpr___TOP__rst__0;
+    CData/*0:0*/ __VstlFirstIteration;
+    CData/*0:0*/ __VicoFirstIteration;
     CData/*0:0*/ __VactContinue;
     IData/*31:0*/ __VactIterCount;
-    VlTriggerVec<1> __VactTriggered;
-    VlTriggerVec<1> __VnbaTriggered;
+    VlTriggerVec<1> __VstlTriggered;
+    VlTriggerVec<1> __VicoTriggered;
+    VlTriggerVec<0> __VactTriggered;
+    VlTriggerVec<0> __VnbaTriggered;
 
     // INTERNAL VARIABLES
     Vshift_register__Syms* const vlSymsp;

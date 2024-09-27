@@ -30,6 +30,7 @@ VM_CLASSES_FAST += \
 # Generated module classes, non-fast-path, compile with low/medium optimization
 VM_CLASSES_SLOW += \
 	Vshift_register___024root__Slow \
+	Vshift_register___024root__DepSet_hc0a0dc9f__0__Slow \
 	Vshift_register___024root__DepSet_ha24f918f__0__Slow \
 
 # Generated support classes, fast-path, compile with highest optimization

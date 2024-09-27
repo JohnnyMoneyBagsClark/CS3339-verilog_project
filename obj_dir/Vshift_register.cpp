@@ -10,8 +10,6 @@
 Vshift_register::Vshift_register(VerilatedContext* _vcontextp__, const char* _vcname__)
     : VerilatedModel{*_vcontextp__}
     , vlSymsp{new Vshift_register__Syms(contextp(), _vcname__, this)}
-    , clk{vlSymsp->TOP.clk}
-    , rst{vlSymsp->TOP.rst}
     , data_in{vlSymsp->TOP.data_in}
     , data_out{vlSymsp->TOP.data_out}
     , rootp{&(vlSymsp->TOP)}
