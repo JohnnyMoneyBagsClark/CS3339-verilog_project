@@ -7,5 +7,5 @@ module addition (
     output wire [3:0] sum,
     output wire carry_out
 );
-    assign {carry_out, sum} = a + b + carry_in; // 4-bit addition with carry
+    assign {carry_out, sum} = a + b + {3'b000, carry_in}; // Extend carry_in to 4 bits
 endmodule

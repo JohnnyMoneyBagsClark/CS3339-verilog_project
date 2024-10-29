@@ -3,8 +3,11 @@
 module subtraction (
     input wire [3:0] a,
     input wire [3:0] b,
-    output wire [3:0] diff,
-    output wire borrow_out
+    input wire carry_in,
+    output wire [3:0] difference,
+    output wire carry_out
 );
-    assign {borrow_out, diff} = a - b; // 4-bit subtraction with borrow
+    // Extend carry_in to 4 bits and perform subtraction
+    assign {carry_out, difference} = a - b - {3'b000, carry_in};
 endmodule
+

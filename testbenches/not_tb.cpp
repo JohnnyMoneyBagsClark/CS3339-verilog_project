@@ -1,36 +1,33 @@
 // not_tb.cpp
 
-#include "Vnot_gate.h"        // Verilator generated header for the NOT gate module
-#include "verilated.h"        // Verilator header for simulation control
-#include "verilated_vcd_c.h"  // Header for VCD waveform generation
+#include "Vnot_gate.h"
+#include "verilated.h"
+#include "verilated_vcd_c.h"
 #include <iostream>
 
 int main(int argc, char** argv, char** env) {
-    Verilated::commandArgs(argc, argv);  // Initialize Verilator with arguments
+    Verilated::commandArgs(argc, argv);
+    Vnot_gate* dut = new Vnot_gate;
+    Verilated::traceEverOn(true);
 
-    Vnot_gate* dut = new Vnot_gate;      // Create an instance of the NOT gate module
-    Verilated::traceEverOn(true);        // Enable waveform tracing
+    VerilatedVcdC* tfp = new VerilatedVcdC;
+    dut->trace(tfp, 99);
+    tfp->open("waveforms/waveform_not_gate.vcd");
 
-    VerilatedVcdC* tfp = new VerilatedVcdC;  // Create VCD trace file
-    dut->trace(tfp, 99);                    // Trace the DUT (Device Under Test)
-
-    // Open the VCD file for writing
-    tfp->open("waveforms/not_waveform.vcd");
-    std::cout << "VCD file opened successfully!" << std::endl;
-
-    // Simulate input and record output
-    dut->a = 0;
+    dut->a = 4;  // 0100 -> NOT
     dut->eval();
-    tfp->dump(0); // Dump waveform for time 0
+    tfp->dump(0);
 
-    dut->a = 1;
+    dut->a = 2;  // 0010 -> NOT
     dut->eval();
-    tfp->dump(10); // Dump waveform for time 10
+    tfp->dump(10);
 
-    // Add a message to indicate simulation completion
-    std::cout << "Simulation finished, closing VCD file." << std::endl;
+    dut->a = 15;  // 1111 -> NOT
+    dut->eval();
+    tfp->dump(20);
+
     dut->final();
-    tfp->close(); // Close the waveform file
+    tfp->close();
 
     delete dut;
     delete tfp;
