@@ -1,63 +1,59 @@
-// alu.v 
-
 module alu (
-    input wire [3:0] a,            // First 4-bit operand
-    input wire [3:0] b,            // Second 4-bit operand
-    input wire [2:0] opcode,       // Operation code (determines function)
-    input wire carry_in,           // Carry-in for add/subtract operations
-    output reg [3:0] result,       // 4-bit result
-    output reg carry_out,          // Carry-out for add/subtract operations
-    output reg [3:0] remainder     // Remainder for division operation
+    input wire [3:0] a,
+    input wire [3:0] b,
+    input wire [3:0] op_code,
+    input wire carry_in,
+    output reg [3:0] result,
+    output reg carry_out = 0
 );
+    wire [3:0] add_out, sub_out, div_out, div_rem;
+    wire [3:0] and_out, or_out, xor_out, nand_out, nor_out, xnor_out;
+    wire [7:0] mul_out;  // 8-bit result for multiplication
+    wire [3:0] unused_mul_bits;  // Dummy wire for unused bits
+    wire add_carry, sub_carry;
 
-    // Internal wires to hold outputs of each operation
-    wire [3:0] and_out, or_out, xor_out, xnor_out, nand_out, nor_out, not_out;
-    wire [3:0] add_out, sub_out, mul_out, div_out;
-    wire add_carry_out, sub_borrow_out;
-    wire [3:0] left_shift, right_shift;
+    // Assign unused higher bits of mul_out
+    assign unused_mul_bits = mul_out[7:4];  // Explicitly assign unused bits
 
-    // Instantiate each operation module
-    and_gate and_inst (.a(a), .b(b), .y(and_out));
-    or_gate or_inst (.a(a), .b(b), .y(or_out));
-    xor_gate xor_inst (.a(a), .b(b), .y(xor_out));
-    xnor_gate xnor_inst (.a(a), .b(b), .y(xnor_out));
-    nand_gate nand_inst (.a(a), .b(b), .y(nand_out));
-    nor_gate nor_inst (.a(a), .b(b), .y(nor_out));
-    not_gate not_inst (.a(a), .y(not_out));
-    
-    adder add_inst (.a(a), .b(b), .carry_in(carry_in), .sum(add_out), .carry_out(add_carry_out));
-    subtractor sub_inst (.a(a), .b(b), .borrow_in(carry_in), .difference(sub_out), .borrow_out(sub_borrow_out));
-    multiplier mul_inst (.a(a), .b(b), .product(mul_out));
-    division div_inst (.a(a), .b(b), .quotient(div_out), .remainder(remainder));
-    
-    shifter shifter_inst (.a(a), .shift(b[1:0]), .left_shift(left_shift), .right_shift(right_shift));
+    // Arithmetic modules
+    addition add(.a(a), .b(b), .carry_in(carry_in), .sum(add_out), .carry_out(add_carry));
+    subtraction sub(.a(a), .b(b), .carry_in(carry_in), .difference(sub_out), .carry_out(sub_carry));
+    multiplication mul(.a(a), .b(b), .product(mul_out));
+    division div(.numerator(a), .denominator(b), .quotient(div_out), .remainder(div_rem));
 
-    // ALU Operation based on opcode
+    // Logic modules
+    and_gate and_gate_instance(.a(a), .b(b), .y(and_out));
+    or_gate or_gate_instance(.a(a), .b(b), .y(or_out));
+    xor_gate xor_gate_instance(.a(a), .b(b), .y(xor_out));
+    nand_gate nand_gate_instance(.a(a), .b(b), .y(nand_out));
+    nor_gate nor_gate_instance(.a(a), .b(b), .y(nor_out));
+    xnor_gate xnor_gate_instance(.a(a), .b(b), .y(xnor_out));
+
     always @(*) begin
-        case (opcode)
-            3'b000: result = and_out;            // AND
-            3'b001: result = or_out;             // OR
-            3'b010: result = xor_out;            // XOR
-            3'b011: result = xnor_out;           // XNOR
-            3'b100: result = nand_out;           // NAND
-            3'b101: result = nor_out;            // NOR
-            3'b110: result = not_out;            // NOT
-            3'b111: begin                        // Addition
-                result = add_out;
-                carry_out = add_carry_out;
-            end
-            3'b1000: begin                       // Subtraction
-                result = sub_out;
-                carry_out = sub_borrow_out;
-            end
-            3'b1001: result = mul_out;           // Multiplication
-            3'b1010: begin                       // Division
-                result = div_out;
-                remainder = remainder;
-            end
-            3'b1011: result = left_shift;        // Left shift
-            3'b1100: result = right_shift;       // Right shift
-            default: result = 4'b0000;           // Default (could be zero or error state)
+        carry_out = 0;
+        case (op_code[3:2])
+            2'b00:
+                case (op_code[1:0])
+                    2'b00: {carry_out, result} = {add_carry, add_out};
+                    2'b01: {carry_out, result} = {sub_carry, sub_out};
+                    2'b10: result = mul_out[3:0];  // Using only lower 4 bits
+                    2'b11: result = div_out;
+                endcase
+            2'b01:
+                case (op_code[1:0])
+                    2'b00: result = and_out;
+                    2'b01: result = or_out;
+                    2'b10: result = xor_out;
+                    2'b11: result = nand_out;
+                endcase
+            2'b10:
+                case (op_code[1:0])
+                    2'b00: result = nor_out;
+                    2'b01: result = xnor_out;
+                    2'b10: result = div_rem;
+                    2'b11: result = 4'b0000;  // Placeholder for unused operation
+                endcase
+            default: result = 4'b0000;  // Safety default
         endcase
     end
 endmodule

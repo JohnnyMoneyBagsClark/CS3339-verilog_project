@@ -7,3 +7,4 @@ module xnor_gate (
 );
     assign y = ~(a ^ b); // 4-bit XNOR operation
 endmodule
+

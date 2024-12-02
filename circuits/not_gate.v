@@ -6,3 +6,4 @@ module not_gate (
 );
     assign y = ~a; // NOT operation
 endmodule
+

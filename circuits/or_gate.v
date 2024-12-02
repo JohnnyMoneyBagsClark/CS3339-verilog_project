@@ -7,3 +7,4 @@ module or_gate (
 );
     assign y = a | b; // 4-bit OR operation
 endmodule
+

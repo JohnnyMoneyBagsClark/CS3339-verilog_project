@@ -10,4 +10,5 @@ module shift_register (
     assign data_out[2] = data_in[3];  // O2 = A3
     assign data_out[3] = 1'b0;        // O3 = 0 (zero-fill the last bit)
 endmodule
+
  

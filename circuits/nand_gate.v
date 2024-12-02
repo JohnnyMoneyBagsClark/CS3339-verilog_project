@@ -1,9 +1,9 @@
-//nand_gate.v
-
+// nand_gate.v
 module nand_gate (
-    input wire a,
-    input wire b,
-    output wire y
+    input wire [3:0] a,
+    input wire [3:0] b,
+    output wire [3:0] y
 );
-    assign y = ~(a & b); // NAND operation
+    assign y = ~(a & b);  // Vectorized NAND operation
 endmodule
+
